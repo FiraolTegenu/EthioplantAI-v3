@@ -1,0 +1,609 @@
+/* Ethionative Plant Database — presentation styles */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-view {
+  animation: fadeIn 0.35s ease-out;
+}
+
+/* Messages */
+.msg--success { color: #166534; }
+.msg--error { color: #b91c1c; }
+.msg--info { color: #4b5563; }
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #ebe8dc 25%, #f5f3ea 50%, #ebe8dc 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.75rem;
+}
+
+.skeleton-line {
+  height: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.skeleton-line--title { width: 70%; height: 1rem; }
+.skeleton-line--short { width: 50%; }
+.skeleton-line--badge { width: 35%; height: 1.25rem; margin-top: 0.75rem; }
+
+/* Plant cards */
+.plant-card {
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(26, 51, 32, 0.06);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.plant-card:hover {
+  box-shadow: 0 8px 24px rgba(26, 51, 32, 0.1);
+  transform: translateY(-2px);
+}
+
+.plant-card--clickable {
+  cursor: pointer;
+}
+
+.plant-card__badge--identified {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.plant-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #f4f2e8;
+  overflow: hidden;
+}
+
+.plant-card__loader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 0;
+}
+
+.plant-card__loader.is-hidden {
+  display: none;
+}
+
+.plant-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.plant-card__img.is-loaded {
+  opacity: 1;
+}
+
+.plant-card__img--error {
+  opacity: 0.4;
+  object-fit: contain;
+  padding: 1rem;
+}
+
+.plant-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f4f2e8;
+}
+
+.plant-card__placeholder.hidden {
+  display: none;
+}
+
+.plant-card__body {
+  padding: 1rem 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.35rem;
+}
+
+.plant-card__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.plant-card__location {
+  font-size: 0.8rem;
+  color: #6b7280;
+  flex-grow: 1;
+}
+
+.plant-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  gap: 0.5rem;
+}
+
+.plant-card__date {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.plant-card__badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background: #f3efe0;
+  color: #6b5e3c;
+  white-space: nowrap;
+}
+
+.plant-card--skeleton .plant-card__media {
+  min-height: 10rem;
+}
+
+/* Upload zone */
+.upload-zone {
+  position: relative;
+  border: 2px dashed #e2dec7;
+  background: #f4f2e8;
+  border-radius: 1rem;
+  min-height: 220px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.upload-zone:hover,
+.upload-zone:focus-within {
+  border-color: #2c4a3b;
+  background: #faf8f0;
+}
+
+.upload-preview-img {
+  display: block;
+}
+
+.image-skeleton {
+  background: linear-gradient(90deg, #ebe8dc 0%, #f5f3eb 50%, #ebe8dc 100%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+#resultUserImage.is-loaded {
+  display: block;
+}
+
+/* Button spinner */
+.btn-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+/* Hero badge */
+/* Results page */
+.results-dl .results-dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 0.2rem;
+}
+
+.results-dl .results-dd {
+  font-size: 1rem;
+  color: #374151;
+}
+
+.results-status--info {
+  background: #f4f2e8;
+  color: #2c4a3b;
+}
+
+.results-status--warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.results-status--error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2c4a3b;
+  background: rgba(44, 74, 59, 0.08);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+/* AI Farming Assistant chat */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.farm-chat {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 9000;
+  font-family: inherit;
+}
+
+.farm-chat__fab {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background: #2c4a3b;
+  color: #fff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(26, 51, 32, 0.28);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.farm-chat__fab:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 28px rgba(26, 51, 32, 0.35);
+}
+
+.farm-chat__fab-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.farm-chat__panel {
+  position: absolute;
+  bottom: 4.25rem;
+  right: 0;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: min(32rem, calc(100vh - 6rem));
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 48px rgba(26, 51, 32, 0.18);
+  overflow: hidden;
+}
+
+.farm-chat__panel.hidden {
+  display: none;
+}
+
+.farm-chat__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: #f4f2e8;
+  border-bottom: 1px solid #e2dec7;
+}
+
+.farm-chat__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a3320;
+  margin: 0;
+}
+
+.farm-chat__subtitle {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin: 0.15rem 0 0;
+}
+
+.farm-chat__icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+
+.farm-chat__context {
+  font-size: 0.7rem;
+  padding: 0.4rem 0.75rem;
+  background: #fcfaee;
+  color: #2c4a3b;
+  border-bottom: 1px solid #e2dec7;
+}
+
+.farm-chat__context-label {
+  font-weight: 600;
+}
+
+.farm-chat__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  min-height: 10rem;
+  max-height: 16rem;
+}
+
+.farm-chat__welcome {
+  font-size: 0.8rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.farm-chat__welcome p {
+  margin: 0 0 0.5rem;
+}
+
+.farm-chat__row {
+  display: flex;
+  margin-bottom: 0.65rem;
+}
+
+.farm-chat__row--user {
+  justify-content: flex-end;
+}
+
+.farm-chat__row--assistant {
+  justify-content: flex-start;
+}
+
+.farm-chat__bubble {
+  max-width: 92%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  position: relative;
+}
+
+.farm-chat__bubble--user {
+  background: #2c4a3b;
+  color: #fff;
+  border-bottom-right-radius: 0.2rem;
+}
+
+.farm-chat__bubble--assistant {
+  background: #f4f2e8;
+  color: #1a3320;
+  border-bottom-left-radius: 0.2rem;
+}
+
+.chat-formatted__heading {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.25rem;
+  color: #1a3320;
+}
+
+.chat-formatted__heading:first-child {
+  margin-top: 0;
+}
+
+.chat-formatted__p {
+  margin: 0.25rem 0;
+}
+
+.chat-formatted__list {
+  margin: 0.25rem 0 0.35rem 1rem;
+  padding: 0;
+}
+
+.chat-formatted__list li {
+  margin-bottom: 0.15rem;
+}
+
+.farm-chat__copy {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.65rem;
+  color: #2c4a3b;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.farm-chat__typing {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0 0.75rem 0.5rem;
+}
+
+.farm-chat__typing.hidden {
+  display: none;
+}
+
+.farm-chat__typing-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #2c4a3b;
+  opacity: 0.35;
+  animation: chatTyping 1.2s ease-in-out infinite;
+}
+
+.farm-chat__typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.farm-chat__typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.farm-chat__typing-label {
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin-left: 0.25rem;
+}
+
+@keyframes chatTyping {
+  0%, 80%, 100% { opacity: 0.35; transform: scale(1); }
+  40% { opacity: 1; transform: scale(1.15); }
+}
+
+.farm-chat__error {
+  margin: 0 0.75rem 0.5rem;
+  padding: 0.5rem 0.65rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.farm-chat__error.hidden {
+  display: none;
+}
+
+.farm-chat__error p {
+  margin: 0 0 0.35rem;
+}
+
+.farm-chat__retry-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #991b1b;
+  background: transparent;
+  border: 1px solid #fca5a5;
+  border-radius: 0.35rem;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+
+.farm-chat__footer {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid #e2dec7;
+  align-items: flex-end;
+}
+
+.farm-chat__input {
+  flex: 1;
+  resize: none;
+  border: 1px solid #d1d5db;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  max-height: 5rem;
+}
+
+.farm-chat__input:focus {
+  outline: none;
+  border-color: #2c4a3b;
+  box-shadow: 0 0 0 2px rgba(44, 74, 59, 0.15);
+}
+
+.farm-chat__send {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 0.65rem;
+  background: #2c4a3b;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.farm-chat__send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.farm-chat__send svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.farm-chat__toolbar {
+  padding: 0.35rem 0.75rem 0.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.farm-chat__toolbar-btn {
+  font-size: 0.7rem;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .farm-chat__panel {
+    width: 24rem;
+    max-height: 34rem;
+  }
+
+  .farm-chat__messages {
+    max-height: 20rem;
+  }
+}

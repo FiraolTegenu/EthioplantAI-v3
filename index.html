@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthioPlant AI</title>
+    <link rel="icon" type="image/png" href="ethiofloraai.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bgTop: '#F4F2E8',
+                            bgBottom: '#FCFAEE',
+                            textDark: '#1A3320',
+                            accent: '#2C4A3B',
+                            border: '#E2DEC7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="font-sans antialiased text-gray-800 bg-brand-bgBottom flex flex-col min-h-screen">
+
+    <div class="bg-brand-bgTop relative z-20 border-b border-brand-border/40">
+        <header class="max-w-[1400px] mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+            <a href="#" class="nav-home flex items-center space-x-2 text-brand-textDark shrink-0">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 1 8.3C18 14 15 19 11 20z"></path>
+                    <path d="M11 20c.5-5.5 2.5-8.5 5-11.5"></path>
+                    <path d="M12 22v-2"></path>
+                </svg>
+                <div class="flex flex-col uppercase tracking-widest font-serif text-[11px] leading-tight font-semibold">
+                    <span>The Botanist's</span>
+                    <span>Realm</span>
+                </div>
+            </a>
+
+            <nav class="flex items-center gap-3 sm:gap-5">
+                <a href="#" class="nav-home hidden sm:inline text-sm font-medium text-brand-textDark border-b border-brand-textDark pb-0.5">Home</a>
+                <button type="button" data-action="upload" class="bg-brand-accent text-white rounded-full px-5 py-2 text-sm font-medium hover:bg-opacity-90 transition-opacity shadow-sm">
+                    Upload Image
+                </button>
+            </nav>
+        </header>
+    </div>
+
+    <main class="flex-grow flex flex-col relative z-10">
+
+        <!-- HOME -->
+        <div id="view-home" class="page-view flex flex-col flex-grow">
+            <section class="bg-brand-bgTop px-4 pt-14 pb-16 md:pt-20 md:pb-24">
+                <div class="max-w-3xl mx-auto text-center">
+                    <p class="hero-badge justify-center">Lets create our own database together!</p>
+                    <h1 class="text-3xl sm:text-4xl md:text-[3.25rem] leading-[1.12] font-serif font-semibold text-brand-textDark mb-5">
+                        Upload and Identify Native Ethiopian Plants
+                    </h1>
+                    <p class="text-gray-600 text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+                        Share plant photos with the community. Each upload is identified with PlantNet and saved to the cloud gallery.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                        <button type="button" id="heroUploadBtn" data-action="upload" class="w-full sm:w-auto bg-brand-accent text-white rounded-xl px-8 py-3.5 font-medium hover:bg-opacity-90 transition-opacity shadow-md text-lg">
+                            Upload a Plant Image
+                        </button>
+                        <button type="button" id="heroDiseaseBtn" data-action="disease" class="w-full sm:w-auto bg-brand-accent text-white rounded-xl px-8 py-3.5 font-medium hover:bg-opacity-90 transition-opacity shadow-md text-lg">
+                            Identify Disease
+                        </button>
+                    </div>
+                    <input type="file" id="fileHeroUpload" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" class="hidden" aria-hidden="true" />
+                    <input type="file" id="fileHeroDisease" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" class="hidden" aria-hidden="true" />
+                </div>
+            </section>
+
+            <section class="bg-brand-bgBottom flex-grow px-4 sm:px-6 py-10 md:py-14">
+                <div class="max-w-[1400px] mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
+                        <div>
+                            <h2 class="text-2xl md:text-3xl font-serif font-semibold text-brand-textDark">Community Gallery</h2>
+                        </div>
+                        <p id="feedStatus" class="text-sm hidden" role="status"></p>
+                    </div>
+
+                    <div id="feedEmpty" class="hidden text-center py-16 px-6 bg-white/60 rounded-2xl border border-brand-border/60 mb-6">
+                        <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-brand-bgTop flex items-center justify-center text-brand-accent">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        </div>
+                        <h3 class="font-semibold text-brand-textDark text-lg mb-2">upload and Identify</h3>
+                        <p class="text-gray-500 text-sm max-w-sm mx-auto mb-6">Be the one of the first to contribute a plant image for identification.</p>
+                        <button type="button" data-action="upload" class="bg-brand-accent text-white rounded-xl px-6 py-3 text-sm font-medium hover:bg-opacity-90 transition-opacity">
+                            Upload 
+                        </button>
+                    </div>
+
+                    <div id="plantFeedGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6" aria-live="polite"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- UPLOAD -->
+        <div id="view-upload" class="hidden page-view flex-grow bg-brand-bgTop flex items-center justify-center p-4 sm:p-6 py-10 md:py-14">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 md:p-12 max-w-2xl w-full shadow-[0_12px_40px_rgba(0,0,0,0.06)] border border-gray-100">
+                <div class="mb-6 md:mb-8">
+                    <h2 class="text-2xl md:text-3xl font-serif font-semibold text-brand-textDark mb-2">Upload Plant Image</h2>
+                    <p class="text-gray-500 text-sm">JPG, PNG, or WEBP · max 10MB · no sign-in required</p>
+                    <p id="uploadMessage" class="text-sm mt-3 hidden" role="alert"></p>
+                </div>
+
+                <form id="pageUploadForm">
+                    <div class="upload-zone flex items-center justify-center p-8 mb-6 group">
+                        <input type="file" id="plantImageInput" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" aria-label="Choose plant image">
+
+                        <div id="uploadPreview" class="hidden absolute inset-0 z-[15] overflow-hidden rounded-[inherit]" aria-hidden="true">
+                            <img id="uploadPreviewImg" src="" alt="Selected plant preview" class="upload-preview-img absolute inset-0 w-full h-full object-cover" />
+                            <div class="absolute inset-0 bg-black/25 flex items-center justify-center pointer-events-none">
+                                <span class="text-white text-sm font-medium bg-black/50 px-4 py-2 rounded-full">Tap to change</span>
+                            </div>
+                        </div>
+
+                        <div id="uploadPlaceholder" class="relative z-10 text-center pointer-events-none">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm mx-auto mb-3 text-brand-accent">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </div>
+                            <p class="font-semibold text-brand-textDark">Click or drag image here</p>
+                            <p class="text-sm text-gray-500 mt-1">Supports JPG, PNG, WEBP</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="uploadName" class="block text-sm font-medium text-gray-700 mb-1.5">Plant title</label>
+                            <input type="text" id="uploadName" placeholder="type Unkown" required class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent">
+                        </div>
+                        <div>
+                            <label for="uploadLocation" class="block text-sm font-medium text-gray-700 mb-1.5">Location <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <input type="text" id="uploadLocation" placeholder="e.g. Bale Mountains" required class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-5 border-t border-gray-100">
+                        <button type="button" class="nav-home px-6 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" id="submitUploadBtn" class="px-8 py-3 bg-brand-accent text-white rounded-xl text-sm font-medium hover:bg-opacity-90 transition-opacity shadow-sm flex items-center justify-center">
+                            <span>Upload &amp; identify</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- DISEASE UPLOAD -->
+        <div id="view-disease-upload" class="hidden page-view flex-grow bg-brand-bgTop flex items-center justify-center p-4 sm:p-6 py-10 md:py-14">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 md:p-12 max-w-2xl w-full shadow-[0_12px_40px_rgba(0,0,0,0.06)] border border-gray-100">
+                <div class="mb-6 md:mb-8">
+                    <h2 class="text-2xl md:text-3xl font-serif font-semibold text-brand-textDark mb-2">Identify Plant Disease</h2>
+                    <p class="text-gray-500 text-sm">Upload a photo of affected leaves, stems, or fruit · JPG, PNG, or WEBP · max 10MB</p>
+                    <p id="diseaseUploadMessage" class="text-sm mt-3 hidden" role="alert"></p>
+                </div>
+
+                <form id="diseaseUploadForm">
+                    <div class="upload-zone flex items-center justify-center p-8 mb-6 group">
+                        <input type="file" id="diseaseImageInput" accept="image/jpeg,image/jpg,image/png,image/webp,.jpg,.jpeg,.png,.webp" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" aria-label="Choose diseased plant image">
+
+                        <div id="diseasePreview" class="hidden absolute inset-0 z-[15] overflow-hidden rounded-[inherit]" aria-hidden="true">
+                            <img id="diseasePreviewImg" src="" alt="Selected disease preview" class="upload-preview-img absolute inset-0 w-full h-full object-cover" />
+                            <div class="absolute inset-0 bg-black/25 flex items-center justify-center pointer-events-none">
+                                <span class="text-white text-sm font-medium bg-black/50 px-4 py-2 rounded-full">Tap to change</span>
+                            </div>
+                        </div>
+
+                        <div id="diseasePlaceholder" class="relative z-10 text-center pointer-events-none">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm mx-auto mb-3 text-brand-accent">
+                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <p class="font-semibold text-brand-textDark">Click or drag affected plant image</p>
+                            <p class="text-sm text-gray-500 mt-1">Focus on visible symptoms when possible</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-5 border-t border-gray-100">
+                        <button type="button" class="nav-home px-6 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" id="submitDiseaseBtn" class="px-8 py-3 bg-brand-accent text-white rounded-xl text-sm font-medium hover:bg-opacity-90 transition-opacity shadow-sm flex items-center justify-center">
+                            <span>Upload &amp; analyze</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="fixed bottom-6 right-6 pointer-events-none opacity-15 z-0" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="#2C4A3B"><path d="M12 0L13.5 10.5L24 12L13.5 13.5L12 24L10.5 13.5L0 12L10.5 10.5L12 0Z"/></svg>
+    </div>
+
+    <script>
+      (function () {
+        var host = location.hostname;
+        var port = location.port;
+        var onServer = (host === 'localhost' || host === '127.0.0.1') && port === '3000';
+        window.__APP_CONFIG__ = {
+          apiBase: onServer ? '' : (host === 'localhost' || host === '127.0.0.1' ? 'http://' + host + ':3000' : ''),
+          debug: /localhost|127\.0\.0\.1/.test(host),
+        };
+      })();
+    </script>
+    <script src="js/upload.js"></script>
+    <script src="js/image-display.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/chat-context.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>

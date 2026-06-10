@@ -1,0 +1,102 @@
+{
+  "collectionId": "plant_images",
+  "name": "Plant Images",
+  "documentSecurity": false,
+  "attributes": [
+    {
+      "key": "image_id",
+      "type": "string",
+      "size": 36,
+      "required": true
+    },
+    {
+      "key": "image_url",
+      "type": "string",
+      "size": 2048,
+      "required": true
+    },
+    {
+      "key": "original_filename",
+      "type": "string",
+      "size": 255,
+      "required": true
+    },
+    {
+      "key": "uploaded_at",
+      "type": "datetime",
+      "required": true
+    },
+    {
+      "key": "plant_title",
+      "type": "string",
+      "size": 255,
+      "required": false
+    },
+    {
+      "key": "location",
+      "type": "string",
+      "size": 512,
+      "required": false
+    },
+    {
+      "key": "scientific_name",
+      "type": "string",
+      "size": 512,
+      "required": false
+    },
+    {
+      "key": "common_names",
+      "type": "string",
+      "size": 2048,
+      "required": false
+    },
+    {
+      "key": "family",
+      "type": "string",
+      "size": 255,
+      "required": false
+    },
+    {
+      "key": "genus",
+      "type": "string",
+      "size": 255,
+      "required": false
+    },
+    {
+      "key": "confidence",
+      "type": "float",
+      "required": false
+    },
+    {
+      "key": "confidence_score",
+      "type": "float",
+      "required": false
+    },
+    {
+      "key": "plantnet_status",
+      "type": "string",
+      "size": 32,
+      "required": false
+    },
+    {
+      "key": "plantnet_result_images",
+      "type": "string",
+      "size": 8192,
+      "required": false
+    },
+    {
+      "key": "identification_notes",
+      "type": "string",
+      "size": 2048,
+      "required": false
+    }
+  ],
+  "indexes": [
+    {
+      "key": "idx_uploaded_at",
+      "type": "key",
+      "attributes": ["uploaded_at"],
+      "orders": ["DESC"]
+    }
+  ]
+}
