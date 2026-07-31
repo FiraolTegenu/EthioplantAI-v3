@@ -90,49 +90,35 @@
 
   function createPlantCard(image) {
 
-    const identified = image.plantnet_status === 'success' && image.scientific_name;
+    const sciName = (image.scientific_name || '').trim();
 
-    const title = identified ? image.scientific_name : image.plant_title || 'Unknown Species';
+    const typedTitle = (image.plant_title || '').trim();
 
-    const subtitle = identified ? image.plant_title || '' : '';
+    const placeholderRe = /^(unknown|unkown|unknown species|type unknown|n\/a)$/i;
+
+    const hasTitle = typedTitle && !placeholderRe.test(typedTitle);
+
+    const title = sciName || (hasTitle ? typedTitle : 'Unknown Species');
+
+    const subtitle = sciName
+
+      ? (image.common_names || '').trim() || (hasTitle ? typedTitle : '')
+
+      : '';
 
     const location = image.location || 'Location not specified';
 
     const dateLabel = formatDate(image.uploaded_at);
 
-    const alt = image.plant_title || image.original_filename || 'Plant image';
+    const alt = typedTitle || image.original_filename || 'Plant image';
 
-    const badgeLabel = identified ? 'Identified' : 'Pending ID';
+    const badgeLabel = sciName ? 'Identified' : '';
 
-    const badgeClass = identified
-
-      ? 'plant-card__badge plant-card__badge--identified'
-
-      : 'plant-card__badge';
-
-    const resultsHref = image.document_id
-
-      ? `results.html?id=${encodeURIComponent(image.document_id)}`
-
-      : '';
-
-
+    const badgeClass = 'plant-card__badge plant-card__badge--identified';
 
     const article = document.createElement('article');
 
     article.className = 'plant-card';
-
-    if (resultsHref) {
-
-      article.classList.add('plant-card--clickable');
-
-      article.tabIndex = 0;
-
-      article.setAttribute('role', 'link');
-
-      article.setAttribute('aria-label', `View identification for ${title}`);
-
-    }
 
     article.dataset.documentId = image.document_id || '';
 
@@ -188,7 +174,7 @@
 
         <span class="plant-card__date">${escapeHtml(dateLabel)}</span>
 
-        <span class="${badgeClass}">${escapeHtml(badgeLabel)}</span>
+        ${badgeLabel ? `<span class="${badgeClass}">${escapeHtml(badgeLabel)}</span>` : ''}
 
       </div>
 
@@ -199,32 +185,6 @@
     article.appendChild(media);
 
     article.appendChild(body);
-
-
-
-    if (resultsHref) {
-
-      const go = () => {
-
-        window.location.href = resultsHref;
-
-      };
-
-      article.addEventListener('click', go);
-
-      article.addEventListener('keydown', (e) => {
-
-        if (e.key === 'Enter' || e.key === ' ') {
-
-          e.preventDefault();
-
-          go();
-
-        }
-
-      });
-
-    }
 
 
 
