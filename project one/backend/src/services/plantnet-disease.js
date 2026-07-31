@@ -204,29 +204,31 @@ export async function identifyDisease(buffer, filename, mimeType = 'image/jpeg')
 
   const url = `${apiBase}/diseases/identify?${params}`;
 
-  const outboundFields = [];
-  for (const [key, value] of formData.entries()) {
-    if (value instanceof File || (typeof Blob !== 'undefined' && value instanceof Blob)) {
-      outboundFields.push({
-        field: key,
-        filename: value.name,
-        type: value.type,
-        size: value.size,
-      });
-    } else {
-      outboundFields.push({ field: key, value: String(value) });
-    }
-  }
-
-  console.log('[PlantNet Disease] Outbound request:', {
-    method: 'POST',
-    url: `${apiBase}/diseases/identify?api-key=…&include-related-images=true&lang=en`,
-    formFields: outboundFields,
-    bufferBytes: buffer.length,
-    filename: safeName,
-    mimeType: safeMime,
-  });
   diseaseLog('POST', `${apiBase}/diseases/identify`, 'file:', safeName, safeMime, 'bytes:', buffer.length);
+
+  if (DEBUG) {
+    const outboundFields = [];
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File || (typeof Blob !== 'undefined' && value instanceof Blob)) {
+        outboundFields.push({
+          field: key,
+          filename: value.name,
+          type: value.type,
+          size: value.size,
+        });
+      } else {
+        outboundFields.push({ field: key, value: String(value) });
+      }
+    }
+    console.log('[PlantNet Disease] Outbound request:', {
+      method: 'POST',
+      url: `${apiBase}/diseases/identify?api-key=…&include-related-images=true&lang=en`,
+      formFields: outboundFields,
+      bufferBytes: buffer.length,
+      filename: safeName,
+      mimeType: safeMime,
+    });
+  }
 
   let response;
   try {

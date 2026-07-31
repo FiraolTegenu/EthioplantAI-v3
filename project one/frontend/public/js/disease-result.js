@@ -223,13 +223,21 @@
       const row = document.createElement('div');
       row.className =
         'flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-brand-bgTop/60 border border-brand-border/40 text-sm';
-      const name = item.disease_name || item.eppo_code || 'Unknown';
-      const sci = item.scientific_name ? ` (${item.scientific_name})` : '';
-      const score =
+
+      const label = document.createElement('span');
+      label.className = 'font-medium text-brand-textDark';
+      label.textContent = item.disease_name || item.eppo_code || 'Unknown';
+      if (item.scientific_name) label.textContent += ` (${item.scientific_name})`;
+
+      const score = document.createElement('span');
+      score.className = 'text-gray-500';
+      score.textContent =
         item.confidence_score != null
           ? `${Math.round(item.confidence_score * 1000) / 10}%`
           : '—';
-      row.innerHTML = `<span class="font-medium text-brand-textDark">${name}${sci}</span><span class="text-gray-500">${score}</span>`;
+
+      row.appendChild(label);
+      row.appendChild(score);
       container.appendChild(row);
     });
     section.classList.remove('hidden');

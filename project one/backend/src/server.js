@@ -1,6 +1,8 @@
 import './loadEnv.js';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import { rateLimit } from 'express-rate-limit';
 import uploadRouter from './routes/upload.js';
 import diseaseUploadRouter from './routes/disease-upload.js';
 import imagesRouter from './routes/images.js';
@@ -14,6 +16,41 @@ import { getAiEnvDiagnostics, probeGroqApi } from './services/aiChat.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  app.set('trust proxy', 1);
+}
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many requests. Please try again later.' },
+});
+
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many chat requests. Please slow down and try again.' },
+});
+
+const uploadLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  limit: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many uploads. Please try again later.' },
+});
 
 function parseAllowedOrigins() {
   const raw = process.env.CLIENT_ORIGIN?.trim();
@@ -47,15 +84,20 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'ethioplantai-api' });
 });
 
-app.use('/api/upload', uploadRouter);
-app.use('/api/disease-upload', diseaseUploadRouter);
+app.use('/api', apiLimiter);
+
+app.use('/api/upload', uploadLimiter, uploadRouter);
+app.use('/api/disease-upload', uploadLimiter, diseaseUploadRouter);
 app.use('/api/images', imagesRouter);
 app.use('/api/identification', identificationRouter);
 app.use('/api/disease', diseaseRouter);
 app.use('/api/files', filesRouter);
-app.use('/api/chat', chatRouter);
+app.use('/api/chat', chatLimiter, chatRouter);
 
-app.use('/api/diag', diagRouter);
+if (!isProduction) {
+  app.use('/api/diag', diagRouter);
+}
+
 app.use('/api', (_req, res) => {
   res.status(404).json({
     success: false,
@@ -78,6 +120,17 @@ app.use((err, _req, res, next) => {
     return;
   }
   next(err);
+});
+
+app.use((err, _req, res, _next) => {
+  const status = err?.status || err?.statusCode || 500;
+  if (status >= 500) {
+    console.error('[server] Unhandled error:', err?.message || err);
+  }
+  res.status(status).json({
+    success: false,
+    error: status >= 500 ? 'Internal server error.' : err?.message || 'Bad request.',
+  });
 });
 
 app.listen(port, async () => {

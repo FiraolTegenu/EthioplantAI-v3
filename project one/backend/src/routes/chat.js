@@ -59,23 +59,16 @@ router.post('/', async (req, res) => {
   const requestStarted = Date.now();
   const diag = getAiEnvDiagnostics();
 
-  console.log('[chat] POST /api/chat — request received');
-  console.log('[chat] Environment:', {
-    groqKeyLoaded: diag.groqKeyLoaded,
-    keySource: diag.keySource,
-    keyMask: diag.keyMask,
-    model: diag.model,
-    apiBase: diag.apiBase,
-    GROQ_API_KEY_set: diag.groqApiKeySet,
-  });
-
   if (DEBUG) {
-    console.log('[chat] Request body:', JSON.stringify({
+    console.log('[chat] POST /api/chat — request received', {
+      groqKeyLoaded: diag.groqKeyLoaded,
+      keySource: diag.keySource,
+      model: diag.model,
+      apiBase: diag.apiBase,
       message: req.body?.message?.slice?.(0, 200),
       historyLength: Array.isArray(req.body?.history) ? req.body.history.length : 0,
-      context: req.body?.context,
       document_id: req.body?.document_id,
-    }));
+    });
   }
 
   if (!diag.groqKeyLoaded) {
@@ -116,7 +109,7 @@ router.post('/', async (req, res) => {
   }
 
   const mergedContext = mergeContext(context, serverContext);
-  console.log('[chat] Merged context:', JSON.stringify(mergedContext));
+  if (DEBUG) console.log('[chat] Merged context:', JSON.stringify(mergedContext));
 
   const result = await generateFarmingAssistantReply({
     message,

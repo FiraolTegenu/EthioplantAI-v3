@@ -174,7 +174,6 @@
   background: #f4f2e8;
   border-radius: 1rem;
   min-height: 220px;
-  position: relative;
   overflow: hidden;
   cursor: pointer;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -605,5 +604,19 @@
 
   .farm-chat__messages {
     max-height: 20rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-view,
+  .skeleton,
+  .image-skeleton,
+  .btn-spinner,
+  .farm-chat__typing-dot,
+  .plant-card,
+  .farm-chat__fab,
+  .upload-zone {
+    animation: none;
+    transition: none;
   }
 }

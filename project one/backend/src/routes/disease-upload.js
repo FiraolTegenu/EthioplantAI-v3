@@ -13,6 +13,7 @@ import { uploadMiddleware, handleMulterError, isAllowedImage } from '../middlewa
 import { identifyDisease, diseaseFromDocument } from '../services/plantnet-disease.js';
 
 const router = Router();
+const DEBUG = process.env.DEBUG_PLANTNET === '1' || process.env.NODE_ENV === 'development';
 
 router.post('/', (req, res, next) => {
   uploadMiddleware(req, res, (err) => {
@@ -54,16 +55,16 @@ router.post('/', (req, res, next) => {
     );
     uploadedFileId = fileId;
 
-    console.log('[disease-upload] Incoming file:', {
-      fieldname: req.file.fieldname,
-      originalname: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size,
-      bufferPresent: Boolean(req.file.buffer?.length),
-      bufferBytes: req.file.buffer?.length ?? 0,
-      reqFiles: req.files ? Object.keys(req.files) : null,
-    });
-
+    if (DEBUG) {
+      console.log('[disease-upload] Incoming file:', {
+        fieldname: req.file.fieldname,
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        bufferBytes: req.file.buffer?.length ?? 0,
+        reqFiles: req.files ? Object.keys(req.files) : null,
+      });
+    }
     console.log('[disease-upload] Starting PlantNet disease identification for', req.file.originalname);
 
     let detection;
