@@ -285,7 +285,28 @@ export async function saveImageMetadata({
     try {
       const doc = await databases.createDocument(databaseId, collectionId, documentId, data);
       if (label !== 'full') {
-        console.warn(`[appwrite] Saved document using "${label}" payload (some attributes may be missing in Console)`);
+        const dropped = [
+          'scientific_name',
+          'common_names',
+          'family',
+          'genus',
+          'confidence',
+          'confidence_score',
+          'plantnet_status',
+        ].filter(
+          (key) =>
+            fullPayload[key] !== undefined &&
+            fullPayload[key] !== null &&
+            fullPayload[key] !== '' &&
+            data[key] == null
+        );
+        if (dropped.length) {
+          console.error(
+            `[appwrite] Saved document using "${label}" payload but DROPPED identification fields: ${dropped.join(', ')}. Check the plant_images collection attributes/schema (e.g. attribute type).`
+          );
+        } else {
+          console.warn(`[appwrite] Saved document using "${label}" payload (some attributes may be missing in Console)`);
+        }
       }
       return doc;
     } catch (error) {
