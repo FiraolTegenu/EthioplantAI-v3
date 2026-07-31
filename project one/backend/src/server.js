@@ -8,6 +8,7 @@ import identificationRouter from './routes/identification.js';
 import diseaseRouter from './routes/disease.js';
 import filesRouter from './routes/files.js';
 import chatRouter from './routes/chat.js';
+import diagRouter from './routes/diag.js';
 import { assertAppwriteConfig } from './config/appwrite.js';
 import { getAiEnvDiagnostics, probeGroqApi } from './services/aiChat.js';
 
@@ -54,6 +55,7 @@ app.use('/api/disease', diseaseRouter);
 app.use('/api/files', filesRouter);
 app.use('/api/chat', chatRouter);
 
+app.use('/api/diag', diagRouter);
 app.use('/api', (_req, res) => {
   res.status(404).json({
     success: false,
