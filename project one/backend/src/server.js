@@ -40,7 +40,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'ethioplantai-api' });
@@ -68,6 +68,14 @@ app.use((_req, res) => {
     error: 'API route not found.',
     data: [],
   });
+});
+
+app.use((err, _req, res, next) => {
+  if (err && /^CORS blocked origin: /.test(String(err?.message || ''))) {
+    res.status(403).json({ success: false, error: String(err.message) });
+    return;
+  }
+  next(err);
 });
 
 app.listen(port, async () => {

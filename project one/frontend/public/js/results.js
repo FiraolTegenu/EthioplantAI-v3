@@ -122,6 +122,8 @@
 
     const local = readLocalPreviewUrl(documentId);
 
+    const usableLocal = local && !local.startsWith('blob:') ? local : '';
+
 
 
     const viewUrl =
@@ -150,7 +152,7 @@
 
     return {
 
-      instant: local || previewUrl || viewUrl,
+      instant: usableLocal || previewUrl || viewUrl,
 
       display: previewUrl || viewUrl,
 

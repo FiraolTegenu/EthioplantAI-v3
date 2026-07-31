@@ -2,7 +2,7 @@ services:
   - type: web
     name: ethioplantai-api
     runtime: node
-    rootDir: backend
+    rootDir: project one/backend
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health

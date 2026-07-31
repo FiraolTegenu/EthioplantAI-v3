@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const docId = result.data?.document_id;
     const resultsUrl =
       result.data?.results_url ||
-      (docId ? `/disease-result/${encodeURIComponent(docId)}` : null);
+      (docId ? `/disease-result.html?id=${encodeURIComponent(docId)}` : null);
 
     if (docId) {
       try {

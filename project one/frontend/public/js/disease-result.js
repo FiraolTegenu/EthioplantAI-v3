@@ -63,6 +63,7 @@
   function pickImageUrls(data, documentId) {
     const cached = readCachedImageMeta(documentId);
     const local = readLocalPreviewUrl(documentId);
+    const usableLocal = local && !local.startsWith('blob:') ? local : '';
 
     const viewUrl =
       data.image_url ||
@@ -77,7 +78,7 @@
       viewUrl;
 
     return {
-      instant: local || previewUrl || viewUrl,
+      instant: usableLocal || previewUrl || viewUrl,
       display: previewUrl || viewUrl,
       full: viewUrl || previewUrl,
     };

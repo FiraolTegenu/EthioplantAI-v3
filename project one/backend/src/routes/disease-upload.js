@@ -102,7 +102,7 @@ router.post('/', (req, res, next) => {
     delete detectionPayload.raw_api_response;
 
     const documentId = document.$id;
-    const resultsUrl = `/disease-result/${encodeURIComponent(documentId)}`;
+    const resultsUrl = `/disease-result.html?id=${encodeURIComponent(documentId)}`;
 
     res.status(201).json({
       success: true,
