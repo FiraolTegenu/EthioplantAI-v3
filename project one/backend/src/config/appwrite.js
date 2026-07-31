@@ -154,7 +154,7 @@ function normalizeConfidenceScore(raw) {
 /**
  * Map PlantNet identification result onto Appwrite document attributes.
  */
-function applyIdentificationToPayload(payload, identification) {
+export function applyIdentificationToPayload(payload, identification) {
   if (!identification) return;
 
   payload.plantnet_status = identification.status || 'unknown';
