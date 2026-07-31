@@ -485,7 +485,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadGallery();
   navigateTo('home');
 
-  if (new URLSearchParams(window.location.search).get('mode') === 'disease') {
+  const urlMode = new URLSearchParams(window.location.search).get('mode');
+  if (urlMode === 'upload') {
+    window.history.replaceState({}, '', 'index.html');
+    openUploadPicker();
+  } else if (urlMode === 'disease') {
     window.history.replaceState({}, '', 'index.html');
     openDiseasePicker();
   }

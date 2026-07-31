@@ -5,3 +5,10 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  VITE_API_URL = "https://ethioplantai-copy.onrender.com"
+
+# Pretty URL for disease results (matches former backend redirect)
+[[redirects]]
+  from = "/disease-result/:id"
+  to = "/disease-result.html?id=:id"
+  status = 302

@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
+          about: resolve(__dirname, 'about.html'),
           results: resolve(__dirname, 'results.html'),
           disease: resolve(__dirname, 'disease-result.html'),
         },
