@@ -1,0 +1,16 @@
+{
+  "name": "ethioplantai-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/generate-config.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/generate-config.mjs",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: ethioplantai-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: APPWRITE_ENDPOINT
+        sync: false
+      - key: APPWRITE_PROJECT_ID
+        sync: false
+      - key: APPWRITE_API_KEY
+        sync: false
+      - key: APPWRITE_BUCKET_ID
+        sync: false
+      - key: APPWRITE_DATABASE_ID
+        sync: false
+      - key: APPWRITE_COLLECTION_ID
+        sync: false
+      - key: APPWRITE_DISEASE_COLLECTION_ID
+        sync: false
+      - key: PLANTNET_API_KEY
+        sync: false
+      - key: PLANTNET_PROJECT
+        value: all
+      - key: PLANTNET_API_BASE
+        value: https://my-api.plantnet.org/v2
+      - key: GROQ_API_KEY
+        sync: false
+      - key: AI_MODEL
+        value: llama-3.3-70b-versatile
+      - key: AI_API_BASE
+        value: https://api.groq.com/openai/v1/chat/completions

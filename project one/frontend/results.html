@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Identification Results — Ethionative Plant Database</title>
+    <link rel="icon" type="image/png" href="ggg.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bgTop: '#F4F2E8',
+                            bgBottom: '#FCFAEE',
+                            textDark: '#1A3320',
+                            accent: '#2C4A3B',
+                            border: '#E2DEC7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="font-sans antialiased text-gray-800 bg-brand-bgBottom flex flex-col min-h-screen">
+
+    <div class="bg-brand-bgTop relative z-20 border-b border-brand-border/40">
+        <header class="max-w-[1400px] mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+            <a href="index.html" class="flex items-center space-x-2 text-brand-textDark shrink-0">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 1 8.3C18 14 15 19 11 20z"></path>
+                    <path d="M11 20c.5-5.5 2.5-8.5 5-11.5"></path>
+                    <path d="M12 22v-2"></path>
+                </svg>
+                <div class="flex flex-col uppercase tracking-widest font-serif text-[11px] leading-tight font-semibold">
+                    <span>The Botanist's</span>
+                    <span>Realm</span>
+                </div>
+            </a>
+            <a href="index.html" class="text-sm font-medium text-brand-accent hover:underline">← Back to gallery</a>
+        </header>
+    </div>
+
+    <main class="flex-grow px-4 sm:px-6 py-10 md:py-14">
+        <div class="max-w-5xl mx-auto">
+            <p id="resultsLoading" class="text-center text-gray-600 py-20">Loading identification results…</p>
+            <p id="resultsError" class="hidden text-center text-red-600 py-20" role="alert"></p>
+
+            <article id="resultsContent" class="hidden">
+                <header class="mb-8 text-center md:text-left">
+                    <p class="hero-badge inline-flex mb-3">PlantNet Identification</p>
+                    <h1 id="resultTitle" class="text-3xl md:text-4xl font-serif font-semibold text-brand-textDark mb-2">—</h1>
+                    <p id="resultSubtitle" class="text-gray-600 italic"></p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 px-4 pt-4">Your upload</p>
+                        <div id="resultImageFrame" class="relative w-full aspect-[4/3] bg-brand-bgTop">
+                            <div id="resultImageSkeleton" class="image-skeleton absolute inset-0" aria-hidden="true"></div>
+                            <img id="resultUserImage" src="" alt="Your uploaded plant" class="hidden w-full h-full object-cover" decoding="async" />
+                            <p id="resultImageError" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-500 px-4 text-center" role="alert">Could not load your uploaded image.</p>
+                        </div>
+                        <div class="p-4 text-sm text-gray-600">
+                            <p id="resultMetaLocation"></p>
+                            <p id="resultMetaDate" class="text-gray-400 mt-1"></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+                        <div id="confidenceBadge" class="hidden inline-flex items-center gap-2 bg-brand-bgTop text-brand-accent rounded-full px-4 py-1.5 text-sm font-semibold mb-5">
+                            <span id="confidenceValue">—</span> confidence
+                        </div>
+
+                        <dl class="results-dl space-y-4">
+                            <div>
+                                <dt class="results-dt">Scientific name</dt>
+                                <dd id="resultScientific" class="results-dd font-medium text-brand-textDark">—</dd>
+                            </div>
+                            <div>
+                                <dt class="results-dt">Common name</dt>
+                                <dd id="resultCommon" class="results-dd">—</dd>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <dt class="results-dt">Family</dt>
+                                    <dd id="resultFamily" class="results-dd">—</dd>
+                                </div>
+                                <div>
+                                    <dt class="results-dt">Genus</dt>
+                                    <dd id="resultGenus" class="results-dd">—</dd>
+                                </div>
+                            </div>
+                        </dl>
+
+                        <div id="resultStatusMessage" class="hidden mt-6 p-4 rounded-xl text-sm"></div>
+                    </div>
+                </div>
+
+                <section id="sectionNotes" class="hidden bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm mb-10">
+                    <h2 class="text-xl font-serif font-semibold text-brand-textDark mb-3">Additional information</h2>
+                    <p id="resultNotes" class="text-gray-600 text-sm leading-relaxed"></p>
+                </section>
+
+                <section id="sectionRelated" class="hidden mb-10">
+                    <h2 class="text-xl font-serif font-semibold text-brand-textDark mb-4">Related reference images</h2>
+                    <p class="text-sm text-gray-500 mb-4">From PlantNet community observations</p>
+                    <div id="relatedImagesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+                </section>
+
+                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                    <a href="index.html" class="bg-brand-accent text-white rounded-xl px-6 py-3 text-sm font-medium hover:bg-opacity-90 transition-opacity">View gallery</a>
+                    <a href="index.html" class="border border-brand-accent text-brand-accent rounded-xl px-6 py-3 text-sm font-medium hover:bg-brand-accent hover:text-white transition-colors">Upload another</a>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/image-display.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/chat-context.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
