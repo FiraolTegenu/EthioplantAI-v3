@@ -25,15 +25,13 @@ router.get('/appwrite', async (_req, res) => {
     names.map((name) => {
       const value = process.env[name] ?? '';
       const isSecret = name.includes('KEY');
-      return [
-        name,
-        {
-          present: value.length > 0,
-          json: JSON.stringify(value),
-          length: value.length,
-          masked: isSecret ? maskSecret(value) : undefined,
-        },
-      ];
+      const report = {
+        present: value.length > 0,
+        length: value.length,
+      };
+      if (!isSecret) report.json = JSON.stringify(value);
+      if (isSecret) report.masked = maskSecret(value);
+      return [name, report];
     })
   );
 
