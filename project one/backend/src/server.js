@@ -13,6 +13,7 @@ import chatRouter from './routes/chat.js';
 import diagRouter from './routes/diag.js';
 import { assertAppwriteConfig } from './config/appwrite.js';
 import { getAiEnvDiagnostics, probeGroqApi } from './services/aiChat.js';
+import { ethiopiaOnly } from './middleware/ethiopiaOnly.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -83,6 +84,8 @@ app.use(express.json({ limit: '1mb' }));
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'ethioplantai-api' });
 });
+
+app.use('/api', ethiopiaOnly);
 
 app.use('/api', apiLimiter);
 

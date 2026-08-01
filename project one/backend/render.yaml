@@ -39,3 +39,5 @@ services:
         value: llama-3.3-70b-versatile
       - key: AI_API_BASE
         value: https://api.groq.com/openai/v1/chat/completions
+      - key: COUNTRY_RESTRICTION
+        value: "true"
