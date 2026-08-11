@@ -53,15 +53,23 @@ const uploadLimiter = rateLimit({
   message: { success: false, error: 'Too many uploads. Please try again later.' },
 });
 
+const PRODUCTION_FRONTEND_ORIGINS = [
+  'https://ethioplantai.vercel.app',
+  'https://ethioplantai.netlify.app',
+];
+
 function parseAllowedOrigins() {
   const raw = process.env.CLIENT_ORIGIN?.trim();
-  if (raw) {
-    return raw
-      .split(',')
-      .map((origin) => origin.trim())
-      .filter(Boolean);
+  const origins = raw
+    ? raw
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean)
+    : [`http://localhost:5173`, `http://localhost:${port}`];
+  for (const origin of PRODUCTION_FRONTEND_ORIGINS) {
+    if (!origins.includes(origin)) origins.push(origin);
   }
-  return [`http://localhost:5173`, `http://localhost:${port}`];
+  return origins;
 }
 
 const allowedOrigins = parseAllowedOrigins();
