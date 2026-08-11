@@ -1,0 +1,14 @@
+{
+  "env": {
+    "VITE_API_URL": "https://ethioplantai-copy.onrender.com"
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/disease-result/:id",
+      "destination": "/disease-result.html?id=:id",
+      "permanent": false
+    }
+  ]
+}

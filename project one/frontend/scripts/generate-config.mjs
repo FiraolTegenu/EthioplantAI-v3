@@ -9,14 +9,13 @@ const configPath = path.join(frontendRoot, 'public', 'js', 'config.js');
 
 /**
  * Minimal .env loader (no external dependency).
- * Reads frontend/.env and populates process.env ONLY for keys that are not
- * already set. Real environment variables (e.g. Netlify build.environment or
- * a CI variable) always take precedence over the .env file, matching the
- * behaviour of dotenv.
+ * Reads a .env file and populates process.env ONLY for keys that are not
+ * already set. Real environment variables (e.g. Vercel build env or a CI
+ * variable) always take precedence over .env files, matching dotenv.
  */
-function loadDotEnv() {
-  if (!fs.existsSync(envPath)) return;
-  const raw = fs.readFileSync(envPath, 'utf8');
+function loadDotEnv(filePath) {
+  if (!fs.existsSync(filePath)) return;
+  const raw = fs.readFileSync(filePath, 'utf8');
   const lines = raw.split(/\r?\n/);
   for (const line of lines) {
     const trimmed = line.trim();
@@ -37,7 +36,10 @@ function loadDotEnv() {
   }
 }
 
-loadDotEnv();
+// Load .env.production first so it wins over .env (matches Vite mode semantics),
+// while real env vars still take precedence over both files.
+loadDotEnv(path.join(frontendRoot, '.env.production'));
+loadDotEnv(envPath);
 
 const apiBase = (process.env.VITE_API_URL || '').replace(/\/$/, '');
 const debug = process.env.VITE_DEBUG === 'true';
